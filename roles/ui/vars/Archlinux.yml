@@ -1,0 +1,5 @@
+---
+libx11_package_name: libx11
+libxft_package_name: libxft
+libxinerama_package_name: libxinerama
+

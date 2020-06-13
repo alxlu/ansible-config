@@ -1,0 +1,77 @@
+---
+- hosts: localhost
+  vars:
+    src_dir: "/home/{{ ansible_user_id }}/.local/src"
+  tasks:
+  - name: Load OS Specific vars
+    include_vars: "{{ lookup('first_found', possible_files) }}"
+    vars:
+      possible_files:
+        - "../vars/{{ ansible_distribution }}.yml"
+        - "../vars/{{ ansible_os_family }}.yml"
+        - ../vars/default.yml
+  - name: Update apt if Ubuntu
+    become: yes
+    when: ansible_distribution == "Ubuntu"
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400
+  - name: Ensure git is there
+    become: yes
+    package:
+      name: git
+      state: present
+  - name: Check for libx11
+    become: yes
+    package:
+      name: "{{ libx11_package_name }}"
+      state: present
+  - name: Check for libxft
+    become: yes
+    package:
+      name: "{{ libxft_package_name }}"
+      state: present
+  - name: Check for freetype2
+    become: yes
+    package:
+      name: "{{ freetype2_package_name }}"
+      state: present
+  - name: Check for fontconfig
+    become: yes
+    package:
+      name: "{{ fontconfig_package_name }}"
+      state: present
+  - name: Check for giflib
+    become: yes
+    package:
+      name: "{{ giflib_package_name }}"
+      state: present
+  - name: Check for libexif
+    become: yes
+    package:
+      name: "{{ libexif_package_name }}"
+      state: present
+  - name: Ensure $HOME/.local/src exists
+    file:
+      path: "{{ src_dir }}"
+      state: directory
+      mode: '0755'
+  - name: Check if sxiv is there
+    stat:
+      path: /usr/local/bin/sxiv
+    register: sxivstat
+  - name: Clone sxiv repository
+    git:
+      repo: 'https://github.com/alxlu/sxiv.git'
+      dest: "{{ src_dir }}/sxiv"
+    register: gitclone
+  - name: Build sxiv
+    when: gitclone.changed or sxivstat.stat.exists == False
+    make:
+      chdir: "{{ src_dir }}/sxiv"
+  - name: Install sxiv
+    become: yes
+    when: gitclone.changed or sxivstat.stat.exists == False
+    make:
+      chdir: "{{ src_dir }}/sxiv"
+      target: install

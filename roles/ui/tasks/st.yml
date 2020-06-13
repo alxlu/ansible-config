@@ -1,0 +1,48 @@
+---
+# TODO: need ttf-emojione/joypixels and ttf-symbola
+- hosts: localhost
+  vars:
+    src_dir: "/home/{{ ansible_user_id }}/.local/src"
+  tasks:
+  - name: Load OS Specific vars
+    include_vars: "{{ lookup('first_found', possible_files) }}"
+    vars:
+      possible_files:
+        - "../vars/{{ ansible_distribution }}.yml"
+        - "../vars/{{ ansible_os_family }}.yml"
+        - ../vars/default.yml
+  - name: Update apt if Ubuntu
+    become: yes
+    when: ansible_distribution == "Ubuntu"
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400
+  - name: Ensure git is there
+    become: yes
+    package:
+      name: git
+      state: present
+  - name: Check if st is there
+    stat:
+      path: /usr/local/bin/st
+    register: ststat
+  - name: Ensure $HOME/.local/src exists
+    file:
+      path: "{{ src_dir }}"
+      state: directory
+      mode: '0755'
+  - name: Clone st repository
+    git:
+      repo: 'https://github.com/alxlu/st.git'
+      dest: "{{ src_dir }}/st"
+    register: gitclonest
+  - name: Build st
+    when: gitclonest.changed or ststat.stat.exists == False
+    make:
+      chdir: "{{ src_dir }}/st"
+  - name: Install st
+    become: yes
+    when: gitclonest.changed or ststat.stat.exists == False
+    make:
+      chdir: "{{ src_dir }}/st"
+      target: install

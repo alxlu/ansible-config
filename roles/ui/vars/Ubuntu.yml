@@ -3,3 +3,9 @@ libx11_package_name: libx11-dev
 libxft_package_name: libxft-dev
 libxinerama_package_name: libxinerama-dev
 
+imlib2_package_name: libimlib2-dev
+freetype2_package_name: freetype2-demos
+fontconfig_package_name: libfontconfig1-dev
+giflib_package_name: libgif-dev
+libexif_package_name: libexif-dev
+

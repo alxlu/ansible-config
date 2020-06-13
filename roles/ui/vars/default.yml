@@ -3,3 +3,8 @@ libx11_package_name: libx11
 libxft_package_name: libxft
 libxinerama_package_name: libxinerama
 
+imlib2_package_name: imlib2
+freetype2_package_name: freetype2
+fontconfig_package_name: fontconfig
+giflib_package_name: giflib
+libexif_package_name: libexif

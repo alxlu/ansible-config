@@ -1,7 +1,7 @@
 ---
 - hosts: all
   vars:
-    src_dir: /home/alex/.local/src
+    src_dir: "/home/{{ ansible_user_id }}/.local/src"
   tasks:
   - name: Load OS Specific vars
     include_vars: "{{ lookup('first_found', possible_files) }}"

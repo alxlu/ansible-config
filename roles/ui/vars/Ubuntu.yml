@@ -9,3 +9,5 @@ fontconfig_package_name: libfontconfig1-dev
 giflib_package_name: libgif-dev
 libexif_package_name: libexif-dev
 
+harfbuzz_package_name: libharfbuzz-dev
+

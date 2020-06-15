@@ -8,3 +8,5 @@ freetype2_package_name: freetype2
 fontconfig_package_name: fontconfig
 giflib_package_name: giflib
 libexif_package_name: libexif
+
+harfbuzz_package_name: harfbuzz

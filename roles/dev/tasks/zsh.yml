@@ -1,0 +1,14 @@
+---
+- name: Ensure $XDG_CONFIG_HOME/zsh
+  file:
+    path: "{{ xdg_config_home }}/zsh"
+    state: directory
+- name: Ensure zsh is there
+  become: yes
+  package:
+    name: zsh
+    state: present
+- name: Clone zsh config
+  git:
+    repo: 'https://github.com/alxlu/zsh-config'
+    dest: "{{ xdg_config_home }}/zsh"

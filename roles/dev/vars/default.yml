@@ -1,0 +1,23 @@
+---
+dotfiles_repo: "https://github.com/alxlu/dotfiles.git"
+dotfiles_repo_version: master
+dotfiles_repo_accept_hostkey: false
+dotfiles_repo_local_destination: "~/Documents/dotfiles"
+
+dotfiles_home: "~"
+dotfiles_files:
+  - .editorconfig
+  - .gitconfig
+  - .gitignore
+  - .hushlogin
+  - .xinitrc
+  - .Xmodmap
+  - .Xresources
+  - .zprofile
+  - .config/dunst
+  - .config/feh
+  - .config/gtk-3.0
+  - .config/lf
+  - .config/mpv
+  - .config/sxhkd
+  - .config/compton.conf

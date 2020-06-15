@@ -1,0 +1,11 @@
+---
+- hosts: normal
+  vars:
+    src_dir: "/home/{{ ansible_user_id }}/.local/src"
+    xdg_config_home: "/home/{{ ansible_user_id }}/.config"
+  tasks:
+    - import_tasks: roles/dev/tasks/dotfiles.yml
+    - import_tasks: roles/dev/tasks/tmux.yml
+    - import_tasks: roles/ui/tasks/dwm.yml
+    - import_tasks: roles/ui/tasks/st.yml
+    - import_tasks: roles/ui/tasks/sxiv.yml

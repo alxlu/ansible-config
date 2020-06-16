@@ -12,16 +12,6 @@
     path: "~/.config"
     state: directory
 
-- name: Ensure $HOME/.config/nvim exists
-  file:
-    path: "~/.config/nvim"
-    state: directory
-
-- name: Ensure $HOME/.config/tmux exists
-  file:
-    path: "~/.config/tmux"
-    state: directory
-
 - name: Ensure dotfiles repository is cloned locally.
   git:
     repo: "{{ dotfiles_repo }}"

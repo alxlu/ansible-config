@@ -6,69 +6,90 @@
       - "../vars/{{ ansible_distribution }}.yml"
       - "../vars/{{ ansible_os_family }}.yml"
       - ../vars/default.yml
+
 - name: Update apt if Ubuntu
   become: yes
   when: ansible_distribution == "Ubuntu"
   apt:
     update_cache: yes
     cache_valid_time: 86400
+
 - name: Ensure git is there
   become: yes
   package:
     name: git
     state: present
+
 - name: Check for libx11
   become: yes
   package:
     name: "{{ libx11_package_name }}"
     state: present
+
 - name: Check for libxft
   become: yes
   package:
     name: "{{ libxft_package_name }}"
     state: present
+
 - name: Check for libxinerama
   become: yes
   package:
     name: "{{ libxinerama_package_name }}"
     state: present
+
 - name: Check if dwm is there
   stat:
     path: /usr/local/bin/dwm
   register: dwmstat
+
 - name: Check if dwmblocks is there
   stat:
     path: /usr/local/bin/dwmblocks
   register: dwmblocksstat
+
 - name: Ensure $HOME/.local/src exists
   file:
     path: "{{ src_dir }}"
     state: directory
     mode: '0755'
+
 - name: Clone dwm repository
   git:
     repo: 'https://github.com/alxlu/dwm.git'
     dest: "{{ src_dir }}/dwm"
   register: gitclonedwm
+
+- name: Set push url to SSH
+  git_config:
+    name: "url.git@github.com:.pushInsteadOf"
+    scope: local
+    value: "https://github.com/"
+    repo: "{{ src_dir }}/dwm"
+
 - name: Build dwm
   when: gitclonedwm.changed or dwmstat.stat.exists == False
   make:
     chdir: "{{ src_dir }}/dwm"
+
 - name: Install dwm
   become: yes
   when: gitclonedwm.changed or dwmstat.stat.exists == False
   make:
     chdir: "{{ src_dir }}/dwm"
     target: install
+
 - name: Clone dwmblocks repository
   git:
     repo: 'https://github.com/alxlu/dwmblocks.git'
     dest: "{{ src_dir }}/dwmblocks"
   register: gitclonedwmblocks
+
 - name: Build dwmblocks
   when: gitclonedwmblocks.changed or dwmblocksstat.stat.exists == False
   make:
     chdir: "{{ src_dir }}/dwmblocks"
+
 - name: Install dwmblocks
   become: yes
   when: gitclonedwmblocks.changed or dwmblocksstat.stat.exists == False

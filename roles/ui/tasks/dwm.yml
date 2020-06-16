@@ -27,10 +27,15 @@
     state: present
 
 - name: Check for libxft
-  become: yes
-  package:
-    name: "{{ libxft_package_name }}"
-    state: present
+  block:
+    - name: Check for normal libxft
+      become: yes
+      package:
+        name: "{{ libxft_package_name }}"
+        state: present
+  rescue:
+    - debug:
+        msg: "TODO: Check for libxft-bgra"
 
 - name: Check for libxinerama
   become: yes

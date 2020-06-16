@@ -1,0 +1,43 @@
+---
+- name: Ensure $XDG_CONFIG_HOME/nvim
+  file:
+    path: "{{ xdg_config_home }}/nvim"
+    state: directory
+
+- name: Ensure $XDG_DATA_HOME/nvim/site/autoload
+  file:
+    path: "{{ xdg_data_home }}/nvim/site/autoload"
+    state: directory
+
+- name: Add neovim ppa if Ubuntu
+  become: yes
+  when: ansible_distribution == "Ubuntu"
+  apt_repository:
+    repo: "ppa:neovim-ppa/stable"
+    state: present
+
+- name: Ensure neovim is installed
+  become: yes
+  package:
+      name: neovim
+      state: present
+
+- name: Clone neovim config
+  git:
+    repo: 'https://github.com/alxlu/nvim-config.git'
+    dest: "{{ xdg_config_home }}/nvim"
+
+- name: Set push url to SSH
+  git_config:
+    name: "url.git@github.com:.pushInsteadOf"
+    scope: local
+    value: "https://github.com/"
+    repo: "{{ xdg_config_home }}/nvim"
+
+- name: Install vim-plug
+  get_url:
+    url: 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    dest: "{{ xdg_data_home }}/nvim/site/autoload/plug.vim"
+
+- name: Install neovim plugins
+  command: 'nvim +PlugInstall +qall --headless'

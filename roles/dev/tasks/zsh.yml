@@ -44,6 +44,9 @@
     state: link
   become: false
 
+- name: Install zsh plugins
+  command: 'zsh -i -c exit'
+
 - name: set zsh as default shell
   become: true
   user:

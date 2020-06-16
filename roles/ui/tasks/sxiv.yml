@@ -6,70 +6,121 @@
       - "../vars/{{ ansible_distribution }}.yml"
       - "../vars/{{ ansible_os_family }}.yml"
       - ../vars/default.yml
+
 - name: Update apt if Ubuntu
   become: yes
   when: ansible_distribution == "Ubuntu"
   apt:
     update_cache: yes
     cache_valid_time: 86400
+
 - name: Ensure git is there
   become: yes
   package:
     name: git
     state: present
+
 - name: Check for libx11
   become: yes
   package:
     name: "{{ libx11_package_name }}"
     state: present
+
 - name: Check for libxft
-  become: yes
-  package:
-    name: "{{ libxft_package_name }}"
-    state: present
+  block:
+    - name: Check for normal libxft
+      become: yes
+      package:
+        name: "{{ libxft_package_name }}"
+        state: present
+  rescue:
+    - debug:
+        msg: "TODO: Check for libxft-bgra"
+
 - name: Check for freetype2
   become: yes
   package:
     name: "{{ freetype2_package_name }}"
     state: present
+
 - name: Check for fontconfig
   become: yes
   package:
     name: "{{ fontconfig_package_name }}"
     state: present
+
 - name: Check for giflib
   become: yes
   package:
     name: "{{ giflib_package_name }}"
     state: present
+
 - name: Check for libexif
   become: yes
   package:
     name: "{{ libexif_package_name }}"
     state: present
+
 - name: Check for imlib2
   become: yes
   package:
     name: "{{ imlib2_package_name }}"
     state: present
+
 - name: Ensure $HOME/.local/src exists
   file:
     path: "{{ src_dir }}"
     state: directory
     mode: '0755'
+
 - name: Check if sxiv is there
   stat:
     path: /usr/local/bin/sxiv
   register: sxivstat
+
 - name: Clone sxiv repository
   git:
     repo: 'https://github.com/alxlu/sxiv.git'
     dest: "{{ src_dir }}/sxiv"
   register: gitclone
+
+- name: Set push url to SSH
+  git_config:
+    name: "url.git@github.com:.pushInsteadOf"
+    scope: local
+    value: "https://github.com/"
+    repo: "{{ src_dir }}/sxiv"
+
+- name: Ensure $XDG_CONFIG_HOME/sxiv
+  file:
+    path: "{{ xdg_config_home }}/sxiv"
+    state: directory
+
+- name: Ensure ~/.config/sxiv/exec is a link
+  command: "ls -F {{ xdg_config_home }}/sxiv/exec"
+  register: existing_exec_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+
+- name: Remove ~/.config/sxiv/exec if it needs to be linked
+  file:
+    path: "{{ xdg_config_home }}/sxiv/exec"
+    state: absent
+  when: "'@' not in existing_exec_info.stdout"
+
+- name: Symlink exec
+  file:
+    src: "{{ src_dir }}/sxiv/exec"
+    dest: "{{ xdg_config_home }}/sxiv/exec"
+    state: link
+  become: false
+
 - name: Build sxiv
   when: gitclone.changed or sxivstat.stat.exists == False
   make:
     chdir: "{{ src_dir }}/sxiv"
+
 - name: Install sxiv
   become: yes
   when: gitclone.changed or sxivstat.stat.exists == False

@@ -21,3 +21,14 @@ dotfiles_files:
   - .config/mpv
   - .config/sxhkd
   - .config/compton.conf
+
+cli_packages:
+  - jq
+  - exa
+  - openssh
+  - fzf
+  - fd
+  - nodejs
+
+cli_urls:
+  cli_urls

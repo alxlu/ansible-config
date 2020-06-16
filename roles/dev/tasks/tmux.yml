@@ -1,17 +1,27 @@
 ---
-- name: Ensure $XDG_CONFIG_HOME/tmux/plugins
-  file:
-    path: "{{ xdg_config_home }}/tmux/plugins"
-    state: directory
 - name: Ensure tmux is there
   become: yes
   package:
     name: tmux
     state: present
+
 - name: Clone tmux config
   git:
     repo: 'https://github.com/alxlu/tmux-config'
     dest: "{{ xdg_config_home }}/tmux"
+
+- name: Ensure $XDG_CONFIG_HOME/tmux/plugins
+  file:
+    path: "{{ xdg_config_home }}/tmux/plugins"
+    state: directory
+
+- name: Set push url to SSH
+  git_config:
+    name: "url.git@github.com:.pushInsteadOf"
+    scope: local
+    value: "https://github.com/"
+    repo: "{{ xdg_config_home }}/tmux"
+
 - name: Clone tpm
   git:
     repo: 'https://github.com/tmux-plugins/tpm'

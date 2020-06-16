@@ -7,6 +7,7 @@
       - "../vars/{{ ansible_os_family }}.yml"
       - ../vars/default.yml
 
-- import_tasks: roles/dev/tasks/neovim.yml
-- import_tasks: roles/dev/tasks/tmux.yml
-- import_tasks: roles/dev/tasks/zsh.yml
+- import_tasks: roles/common/tasks/dotfiles.yml
+- import_tasks: neovim.yml
+- import_tasks: zsh.yml
+- import_tasks: tmux.yml

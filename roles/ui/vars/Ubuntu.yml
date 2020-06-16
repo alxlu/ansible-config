@@ -11,3 +11,13 @@ libexif_package_name: libexif-dev
 
 harfbuzz_package_name: libharfbuzz-dev
 
+dotfiles_files:
+  - .xinitrc
+  - .Xmodmap
+  - .Xresources
+  - .config/compton.conf
+  - .config/sxhkd
+  - .config/mpv
+  - .config/feh
+  - .wallpapers
+  - bin

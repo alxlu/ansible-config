@@ -1,5 +1,4 @@
 ---
-
 - name: Load OS Specific vars
   include_vars: "{{ lookup('first_found', possible_files) }}"
   vars:

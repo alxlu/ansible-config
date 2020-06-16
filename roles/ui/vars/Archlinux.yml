@@ -10,3 +10,14 @@ giflib_package_name: giflib
 libexif_package_name: libexif
 
 harfbuzz_package_name: harfbuzz
+
+dotfiles_files:
+  - .xinitrc
+  - .Xmodmap
+  - .Xresources
+  - .config/compton.conf
+  - .config/sxhkd
+  - .config/mpv
+  - .config/feh
+  - .wallpapers
+  - bin

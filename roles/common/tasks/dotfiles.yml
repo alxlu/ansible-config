@@ -1,11 +1,6 @@
 ---
 - name: Load OS Specific vars
-  include_vars: "{{ lookup('first_found', possible_files) }}"
-  vars:
-    possible_files:
-      - "../vars/{{ ansible_distribution }}.yml"
-      - "../vars/{{ ansible_os_family }}.yml"
-      - ../vars/default.yml
+  include_vars: "../vars/default.yml"
 
 - name: Ensure $HOME/.config exists
   file:
@@ -16,9 +11,14 @@
   git:
     repo: "{{ dotfiles_repo }}"
     dest: "{{ dotfiles_repo_local_destination }}"
-    version: "{{ dotfiles_repo_version }}"
-    accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
   become: false
+
+- name: Set push url to SSH
+  git_config:
+    name: "url.git@github.com:.pushInsteadOf"
+    scope: local
+    value: "https://github.com/"
+    repo: "{{ dotfiles_repo_local_destination }}"
 
 - name: Ensure all configured dotfiles are links.
   command: "ls -F {{ dotfiles_home }}/{{ item }}"

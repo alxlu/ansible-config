@@ -1,0 +1,49 @@
+---
+- name: Check for base-devel packages
+  become: yes
+  pacman:
+    name: base-devel
+    state: present
+
+- name: Check for git package
+  become: yes
+  pacman:
+    name: git
+    state: present
+
+- name: Check if yay is there
+  stat:
+    path: /usr/bin/yay
+  register: yaystat
+
+- name: Clone Yay repository
+  when: yaystat.stat.exists == False
+  git:
+    repo: 'https://aur.archlinux.org/yay.git'
+    dest: "{{ src_dir }}/yay"
+    version: "master"
+
+- name: Install Yay
+  when: yaystat.stat.exists == False
+  shell: >-
+    echo "y" | makepkg -si
+  args:
+    chdir: "{{ src_dir }}/yay"
+
+- name: Colored output
+  when: colored_output
+  become: yes
+  lineinfile:
+    dest: /etc/pacman.conf
+    state: present
+    regexp: "^(.*)Color"
+    line: "Color"
+
+- name: Neutral color output
+  when: not colored_output
+  become: yes
+  lineinfile:
+    dest: /etc/pacman.conf
+    state: present
+    regexp: "^(.*)Color"
+    line: "#Color"

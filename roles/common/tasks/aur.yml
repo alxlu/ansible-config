@@ -1,5 +1,5 @@
 ---
-- name: "install {{ aur_packages }}"
+- name: "AUR install {{ aur_packages }}"
   aur:
     use: yay
     name: "{{ aur_packages }}"

@@ -1,5 +1,5 @@
 ---
-- name: "Install {{ item.name }}"
+- name: "Snap Install {{ item.name }}"
   become: yes
   loop: "{{ snap_packages }}"
   snap:

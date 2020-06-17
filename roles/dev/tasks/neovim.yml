@@ -19,8 +19,8 @@
 - name: Ensure neovim is installed
   become: yes
   package:
-      name: neovim
-      state: present
+    name: neovim
+    state: present
 
 - name: Clone neovim config
   git:

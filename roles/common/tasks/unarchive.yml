@@ -1,0 +1,8 @@
+---
+- name: "Extract {{ item.src }} into {{ item.dest }}"
+  loop: "{{ archives }}"
+  unarchive:
+    remote_src: yes
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"

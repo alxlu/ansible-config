@@ -31,7 +31,6 @@
     chdir: "{{ src_dir }}/yay"
 
 - name: Colored output
-  when: colored_output
   become: yes
   lineinfile:
     dest: /etc/pacman.conf
@@ -39,11 +38,3 @@
     regexp: "^(.*)Color"
     line: "Color"
 
-- name: Neutral color output
-  when: not colored_output
-  become: yes
-  lineinfile:
-    dest: /etc/pacman.conf
-    state: present
-    regexp: "^(.*)Color"
-    line: "#Color"

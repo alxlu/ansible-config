@@ -1,0 +1,50 @@
+packages:
+  - jq
+  - openssh-server
+  - mosh
+  - nano
+  - ncdu
+  - fzf
+  - ripgrep
+  - ansible
+  - ansible-lint
+  - yamllint
+  - keychain
+  - nmap
+  - rclone
+  - bat
+  - tree
+  - htop
+  - rsync
+  - keychain
+  - jid
+  - unzip
+  - tar
+  - fd-find
+  - lazygit
+
+ppas:
+  - "ppa:lazygit-team/release"
+
+archives:
+  - src: "https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip"
+    dest: "{{ ansible_tmp }}"
+    mode: '755'
+  - src: "https://github.com/gokcehan/lf/releases/download/r14/lf-linux-amd64.tar.gz"
+    dest: "{{ exec_bin }}"
+    mode: '755'
+
+remote_copy:
+  - src: "{{ ansible_tmp }}/exa-linux-x86_64"
+    dest: "{{ exec_bin }}/exa"
+    mode: '755'
+
+symlinks:
+  - src: "/usr/bin/fdfind"
+    dest: "/usr/local/bin/fd"
+    mode: '755'
+
+snap_packages:
+  - name: node
+    classic: yes
+    channel: 14

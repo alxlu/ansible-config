@@ -1,0 +1,30 @@
+packages:
+  - jq
+  - exa
+  - openssh-server
+  - mosh
+  - nano
+  - ncdu
+  - fzf
+  - fd
+  - nodejs
+  - ripgrep
+  - ansible
+  - ansible-lint
+  - yamllint
+  - keychain
+  - fakeroot
+  - nmap
+  - rclone
+  - bat
+  - tree
+  - htop
+  - rsync
+  - keychain
+
+aur_packages:
+  - lf-git
+  - ttf-joypixels
+  - fd
+  - lazygit
+

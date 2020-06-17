@@ -42,4 +42,3 @@
     state: link
   become: false
   with_items: "{{ dotfiles_files }}"
-

@@ -1,12 +1,11 @@
 ---
-- name: Load OS Specific vars
-  include_vars: "{{ lookup('first_found', possible_files) }}"
+- hosts: localhost
+  roles:
+    - kewlfft.aur
   vars:
-    possible_files:
-      - "../vars/{{ ansible_distribution }}.yml"
-      - "../vars/{{ ansible_os_family }}.yml"
-      - ../vars/default.yml
-
-- import_tasks: roles/dev/tasks/neovim.yml
-- import_tasks: roles/dev/tasks/tmux.yml
-- import_tasks: roles/dev/tasks/zsh.yml
+    src_dir: "~/.local/src"
+    xdg_config_home: "~/.config"
+    xdg_data_home: "~/.local/share"
+  tasks:
+    - import_tasks: roles/dev/tasks/main.yml
+    - import_tasks: roles/ui/tasks/main.yml

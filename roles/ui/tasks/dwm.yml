@@ -73,13 +73,13 @@
     repo: "{{ src_dir }}/dwm"
 
 - name: Build dwm
-  when: gitclonedwm.changed or dwmstat.stat.exists == False
+  when: gitclonedwm.changed or not dwmstat.stat.exists
   make:
     chdir: "{{ src_dir }}/dwm"
 
 - name: Install dwm
   become: yes
-  when: gitclonedwm.changed or dwmstat.stat.exists == False
+  when: gitclonedwm.changed or not dwmstat.stat.exists
   make:
     chdir: "{{ src_dir }}/dwm"
     target: install
@@ -91,13 +91,13 @@
   register: gitclonedwmblocks
 
 - name: Build dwmblocks
-  when: gitclonedwmblocks.changed or dwmblocksstat.stat.exists == False
+  when: gitclonedwmblocks.changed or not dwmblocksstat.stat.exists
   make:
     chdir: "{{ src_dir }}/dwmblocks"
 
 - name: Install dwmblocks
   become: yes
-  when: gitclonedwmblocks.changed or dwmblocksstat.stat.exists == False
+  when: gitclonedwmblocks.changed or not dwmblocksstat.stat.exists
   make:
     chdir: "{{ src_dir }}/dwmblocks"
     target: install

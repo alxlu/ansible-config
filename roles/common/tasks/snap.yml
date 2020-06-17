@@ -1,0 +1,9 @@
+---
+- name: "Install {{ item.name }}"
+  become: yes
+  loop: "{{ snap_packages }}"
+  snap:
+    name: "{{ item.name }}"
+    classic: "{{ item.classic }}"
+    channel: "{{ item. channel }}"
+

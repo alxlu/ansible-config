@@ -1,11 +1,50 @@
 ---
+- name: Load default vars
+  include_vars: ../vars/default.yml
+
 - name: Load OS Specific vars
   include_vars: "{{ lookup('first_found', possible_files) }}"
   vars:
     possible_files:
       - "../vars/{{ ansible_distribution }}.yml"
       - "../vars/{{ ansible_os_family }}.yml"
-      - ../vars/default.yml
+
+- import_tasks: ../../common/tasks/dirs.yml
+
+- import_tasks: ../../common/tasks/yay.yml
+  when: aur_packages is defined
+
+- import_tasks: ../../common/tasks/aur.yml
+  when: aur_packages is defined
+
+- import_tasks: ../../common/tasks/snap.yml
+  when: snap_packages is defined
+
+- import_tasks: ../../common/tasks/ppa.yml
+  when: ppas is defined
+
+- name: Update apt if Ubuntu
+  become: yes
+  when: ansible_distribution == "Ubuntu"
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- import_tasks: ../../common/tasks/packages.yml
+  when: packages is defined
+  become: yes
+
+- import_tasks: ../../common/tasks/unarchive.yml
+  when: archives is defined
+  become: yes
+
+- import_tasks: ../../common/tasks/remote_copy.yml
+  when: remote_copy is defined
+  become: yes
+
+- import_tasks: ../../common/tasks/symlink.yml
+  when: symlinks is defined
+  become: yes
 
 - import_tasks: roles/common/tasks/dotfiles.yml
 - import_tasks: neovim.yml

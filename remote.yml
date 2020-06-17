@@ -1,5 +1,7 @@
 ---
 - hosts: one
+  roles:
+    - kewlfft.aur
   vars:
     src_dir: "/root/.local/src"
     xdg_config_home: "/root/.config"

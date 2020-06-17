@@ -1,0 +1,7 @@
+---
+- name: add apt repos
+  become: yes
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items: "{{ ppas }}"

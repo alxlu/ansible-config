@@ -21,3 +21,20 @@ dotfiles_files:
   - .config/feh
   - .wallpapers
   - bin
+
+packages:
+  - zenity
+  - zathura
+  - rofi
+  - mpv
+  - i3lock
+  - sxhkd
+  - feh
+  - dunst
+  - imagemagick
+
+aur_packages:
+  - dragon-drag-and-drop-git
+  - google-chrome
+  - picom-tryone-git
+  - ytop-bin

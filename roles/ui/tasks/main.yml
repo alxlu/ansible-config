@@ -1,19 +1,24 @@
 ---
+- name: Load default vars
+  include_vars: ../vars/default.yml
+
 - name: Load OS Specific vars
   include_vars: "{{ lookup('first_found', possible_files) }}"
   vars:
     possible_files:
       - "../vars/{{ ansible_distribution }}.yml"
       - "../vars/{{ ansible_os_family }}.yml"
-      - ../vars/default.yml
+
+- import_tasks: ../../common/tasks/yay.yml
+  when: aur_packages is defined
+
+- import_tasks: ../../common/tasks/aur.yml
+  when: aur_packages is defined
+- import_tasks: ../../common/tasks/packages.yml
+  when: packages is defined
+  become: yes
 
 - import_tasks: roles/common/tasks/dotfiles.yml
 - import_tasks: dwm.yml
 - import_tasks: st.yml
 - import_tasks: sxiv.yml
-
-- import_tasks: aur.yml
-  when: aur_package is defined
-
-- import_tasks: package.yml
-  when: package is defined

@@ -1,0 +1,8 @@
+---
+- name: Ensure /tmp/ansible exists
+  file:
+    path: "{{ ansible_tmp }}"
+    state: directory
+    mode: '755'
+
+

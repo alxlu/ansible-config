@@ -17,8 +17,8 @@
 - import_tasks: ../../common/tasks/aur.yml
   when: aur_packages is defined
 
-- import_tasks: ../../common/tasks/snap.yml
-  when: snap_packages is defined
+  # - import_tasks: ../../common/tasks/snap.yml
+  # when: snap_packages is defined
 
 - import_tasks: ../../common/tasks/ppa.yml
   when: ppas is defined

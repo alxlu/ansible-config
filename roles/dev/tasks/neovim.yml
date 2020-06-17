@@ -40,4 +40,6 @@
     dest: "{{ xdg_data_home }}/nvim/site/autoload/plug.vim"
 
 - name: Install neovim plugins
-  command: 'nvim +PlugInstall +qall --headless'
+  command:
+    cmd: 'nvim +PlugInstall +qall --headless'
+    creates: "{{ xdg_config_home }}/nvim/plugged/**"

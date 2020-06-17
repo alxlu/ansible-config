@@ -45,7 +45,9 @@
   become: false
 
 - name: Install zsh plugins
-  command: 'zsh -i -c exit'
+  command:
+    cmd: 'zsh -i -c exit'
+    creates: "~/.zinit"
 
 - name: set zsh as default shell
   become: true

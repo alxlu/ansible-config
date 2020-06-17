@@ -1,5 +1,6 @@
 packages:
   - jq
+  - fasd
   - openssh-server
   - mosh
   - nano

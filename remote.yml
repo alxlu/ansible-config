@@ -1,5 +1,5 @@
 ---
-- hosts: one
+- hosts: all
   roles:
     - kewlfft.aur
   vars:

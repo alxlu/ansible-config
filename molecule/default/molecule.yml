@@ -4,7 +4,10 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance
+  - name: instance-arch
+    image: archlinux:latest
+    pre_build_image: true
+  - name: instance-ubuntu
     image: ubuntu-eoan-ansible
     pre_build_image: true
     pull: no

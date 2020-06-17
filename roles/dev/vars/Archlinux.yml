@@ -1,7 +1,7 @@
 packages:
   - jq
   - exa
-  - openssh-server
+  - openssh
   - mosh
   - nano
   - ncdu

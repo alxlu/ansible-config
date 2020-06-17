@@ -1,5 +1,7 @@
 ---
 - name: "AUR install {{ aur_packages }}"
+  become: yes
+  become_user: aur_builder
   aur:
     use: yay
     name: "{{ aur_packages }}"

@@ -14,8 +14,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
-      - name: ls
-        run: ls alxlu
       - name: build arch container
         run:
           cd ./alxlu/ansible-config/molecule &&

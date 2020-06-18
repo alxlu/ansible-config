@@ -4,5 +4,3 @@
     path: "{{ ansible_tmp }}"
     state: directory
     mode: '755'
-
-

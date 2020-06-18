@@ -12,6 +12,10 @@ platforms:
     image: ubuntu-eoan-ansible
     pre_build_image: true
     pull: no
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 provisioner:
   name: ansible
 verifier:

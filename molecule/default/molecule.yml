@@ -5,8 +5,9 @@ driver:
   name: docker
 platforms:
   - name: instance-arch
-    image: archlinux:latest
+    image: arch-ansible
     pre_build_image: true
+    pull: no
   - name: instance-ubuntu
     image: ubuntu-eoan-ansible
     pre_build_image: true

@@ -1,0 +1,28 @@
+---
+name: CI
+'on':
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    name: Molecule
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: ls
+        run: ls alxlu
+      - name: build arch container
+        run:
+          cd ./alxlu/ansible-config/molecule &&
+          docker build -f ./arch.Dockerfile -t arch-ansible .
+      - name: build ubuntu container
+        run:
+          cd ./alxlu/ansible-config/molecule &&
+          docker build -f ./ubuntu.Dockerfile -t ubuntu-eoan-ansible .
+      - name: run molecule test
+        uses: robertdebock/molecule-action@2.3.4

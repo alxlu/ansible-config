@@ -8,8 +8,8 @@ name: CI
   schedule:
     - cron: "0 0 * * *" # daily
 jobs:
-  test:
-    name: Molecule
+  linux:
+    name: Molecule Linux
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -26,3 +26,21 @@ jobs:
           docker build -f ./ubuntu.Dockerfile -t ubuntu-eoan-ansible .
       - name: run molecule test
         uses: robertdebock/molecule-action@2.3.4
+  macos:
+    name: Molecule macOS
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: install homebrew
+        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      - name: install ansible
+        run: brew install ansible
+      - name: install molecule
+        run: brew install molecule
+      - name: run molecule test
+        run:
+          cd ./alxlu/ansible-config &&
+          molecule test --scenario-name macos

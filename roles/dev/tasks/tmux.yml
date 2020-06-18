@@ -1,6 +1,6 @@
 ---
 - name: Ensure tmux is there
-  become: not ansible_os_family == "Darwin"
+  become: "{{ 'no' if ansible_os_family == 'Darwin' else 'yes' }}"
   package:
     name: tmux
     state: present

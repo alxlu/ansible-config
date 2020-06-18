@@ -33,7 +33,7 @@
 
 - import_tasks: ../../common/tasks/packages.yml
   when: packages is defined
-  become: not ansible_os_family == "Darwin"
+  become: "{{ 'no' if ansible_os_family == 'Darwin' else 'yes' }}"
 
 - import_tasks: ../../common/tasks/unarchive.yml
   when: archives is defined

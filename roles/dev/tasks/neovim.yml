@@ -17,7 +17,7 @@
     state: present
 
 - name: Ensure neovim is installed
-  become: yes
+  become: not ansible_os_family == "Darwin"
   package:
     name: neovim
     state: present
@@ -40,6 +40,7 @@
     dest: "{{ xdg_data_home }}/nvim/site/autoload/plug.vim"
 
 - name: Install neovim plugins
+  when: not ansible_os_family == "Darwin"
   command:
     cmd: 'nvim +PlugInstall +qall --headless'
     creates: "{{ xdg_config_home }}/nvim/plugged/**"

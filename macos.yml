@@ -8,4 +8,3 @@
     xdg_data_home: "~/.local/share"
   tasks:
     - import_tasks: roles/dev/tasks/main.yml
-    - import_tasks: roles/ui/tasks/st.yml

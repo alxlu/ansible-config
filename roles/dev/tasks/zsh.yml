@@ -5,7 +5,7 @@
     state: directory
 
 - name: Ensure zsh is there
-  become: yes
+  when: not ansible_os_family == "Darwin"
   package:
     name: zsh
     state: present
@@ -50,6 +50,7 @@
     creates: "~/.zinit"
 
 - name: set zsh as default shell
+  when: not ansible_os_family == "Darwin"
   become: true
   user:
     name: "{{ ansible_user_id }}"

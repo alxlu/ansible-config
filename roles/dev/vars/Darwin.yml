@@ -1,26 +1,22 @@
+---
 packages:
   - jq
   - exa
-  - openssh
   - mosh
   - ncdu
   - fzf
   - fd
-  - nodejs
+  - node
   - ripgrep
   - ansible
   - ansible-lint
   - yamllint
   - keychain
-  - fakeroot
   - nmap
   - rclone
   - bat
   - tree
   - htop
   - rsync
+  - lf
 
-aur_packages:
-  - lf-git
-  - ttf-joypixels
-  - lazygit

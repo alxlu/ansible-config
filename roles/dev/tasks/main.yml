@@ -8,6 +8,7 @@
     possible_files:
       - "../vars/{{ ansible_distribution }}.yml"
       - "../vars/{{ ansible_os_family }}.yml"
+      - "../vars/default.yml"
 
 - import_tasks: ../../common/tasks/dirs.yml
 
@@ -32,7 +33,7 @@
 
 - import_tasks: ../../common/tasks/packages.yml
   when: packages is defined
-  become: yes
+  become: not ansible_os_family == "Darwin"
 
 - import_tasks: ../../common/tasks/unarchive.yml
   when: archives is defined

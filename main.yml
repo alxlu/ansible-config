@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: main,nuc
   roles:
     - kewlfft.aur
   vars:

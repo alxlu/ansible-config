@@ -15,7 +15,7 @@ platforms:
 lint: |
   set -e
   yamllint .
-  ansible-lint
+  # ansible-lint
 provisioner:
   name: ansible
 verifier:

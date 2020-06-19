@@ -30,6 +30,7 @@
   block:
     - name: Check for normal libxft
       become: yes
+      ignore_errors: yes
       package:
         name: "{{ libxft_package_name }}"
         state: present

@@ -1,5 +1,5 @@
 ---
-- hosts: macos
+- hosts: all
   roles:
     - kewlfft.aur
   vars:

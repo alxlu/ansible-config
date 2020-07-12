@@ -12,6 +12,8 @@ platforms:
     image: ubuntu-eoan-ansible
     pre_build_image: true
     pull: no
+  - name: instance-fedora
+    image: geerlingguy/docker-fedora32-ansible:latest
 lint: |
   set -e
   yamllint .

@@ -1,0 +1,10 @@
+---
+- name: RPM fusion free setup
+  dnf:
+    name: https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-32.noarch.rpm
+    state: present
+
+- name: RPM fusion nonfree setup
+  dnf:
+    name: https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-32.noarch.rpm
+    state: present

@@ -15,6 +15,9 @@
 - import_tasks: ../../common/tasks/yay.yml
   when: aur_packages is defined
 
+- import_tasks: ../../common/tasks/rpmfusion.yml
+  when: ansible_distribution == "Fedora"
+
 - import_tasks: ../../common/tasks/aur.yml
   when: aur_packages is defined
 

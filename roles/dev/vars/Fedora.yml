@@ -1,0 +1,30 @@
+packages:
+  - git
+  - jq
+  - fzf
+  - ncdu
+  - fzf
+  - ripgrep
+  - ansible
+  - ansible-lint
+  - yamllint
+  - keychain
+  - nmap
+  - rclone
+  - bat
+  - tree
+  - htop
+  - rsync
+  - keychain
+  - jid
+  - unzip
+  - tar
+  - fd-find
+  - exa
+  - nodejs
+  - nodejs-yarn
+
+archives:
+  - src: "https://github.com/gokcehan/lf/releases/download/r14/lf-linux-amd64.tar.gz"
+    dest: "{{ exec_bin }}"
+    mode: '755'

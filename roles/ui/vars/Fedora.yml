@@ -1,0 +1,39 @@
+---
+libx11_package_name: libX11-devel
+libxft_package_name: libXft-devel
+libxinerama_package_name: libXinerama-devel
+
+imlib2_package_name: imlib2-devel
+freetype2_package_name: freetype-devel
+fontconfig_package_name: fontconfig-devel
+giflib_package_name: giflib-devel
+libexif_package_name: libexif-devel
+
+harfbuzz_package_name: harfbuzz-devel
+
+dotfiles_files:
+  - .xinitrc
+  - .Xmodmap
+  - .Xresources
+  - .config/compton.conf
+  - .config/sxhkd
+  - .config/mpv
+  - .config/feh
+  - .config/dunst
+  - .wallpapers
+  - bin
+
+packages:
+  - make
+  - gcc
+  - zenity
+  - zathura
+  - rofi
+  - mpv
+  - i3lock
+  - sxhkd
+  - feh
+  - dunst
+  - ImageMagick
+  - picom
+  - https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm

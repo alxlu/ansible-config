@@ -6,6 +6,7 @@
 
 - name: Ensure zsh is there
   when: not ansible_os_family == "Darwin"
+  become: yes
   package:
     name: zsh
     state: present

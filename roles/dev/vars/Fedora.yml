@@ -23,6 +23,13 @@ packages:
   - exa
   - nodejs
   - nodejs-yarn
+  - terminus-fonts-console
+  - youtube-dl
+  - neofetch
+  - lm_sensors
+  - cifs-utils
+  - patch
+  - ffmpeg
 
 archives:
   - src: "https://github.com/gokcehan/lf/releases/download/r14/lf-linux-amd64.tar.gz"

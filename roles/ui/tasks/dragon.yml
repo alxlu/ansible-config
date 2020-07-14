@@ -1,0 +1,50 @@
+---
+- name: Load OS Specific vars
+  include_vars: "{{ lookup('first_found', possible_files) }}"
+  vars:
+    possible_files:
+      - "../vars/{{ ansible_distribution }}.yml"
+      - "../vars/{{ ansible_os_family }}.yml"
+      - ../vars/default.yml
+
+- name: Ensure git is there
+  become: yes
+  package:
+    name: git
+    state: present
+
+
+- name: Ensure gtk3-devel is there
+  become: yes
+  package:
+    name: gtk3-devel
+    state: present
+
+- name: Ensure $HOME/.local/src exists
+  file:
+    path: "{{ src_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Check if dragon is there
+  stat:
+    path: "~/.local/bin/dragon"
+  register: dragonstat
+
+- name: Clone dragon repository
+  git:
+    repo: 'https://github.com/mwh/dragon.git'
+    dest: "{{ src_dir }}/dragon"
+  register: gitclone
+
+- name: Build dragon
+  when: gitclone.changed or dragonstat.stat.exists == False
+  make:
+    chdir: "{{ src_dir }}/dragon"
+
+- name: Install dragon
+  become: no
+  when: gitclone.changed or dragonstat.stat.exists == False
+  make:
+    chdir: "{{ src_dir }}/dragon"
+    target: install

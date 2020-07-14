@@ -22,3 +22,5 @@
 - import_tasks: dwm.yml
 - import_tasks: st.yml
 - import_tasks: sxiv.yml
+- import_tasks: dragon.yml
+  when: ansible_distribution == "Fedora"

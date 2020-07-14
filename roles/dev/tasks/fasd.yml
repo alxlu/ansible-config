@@ -1,0 +1,43 @@
+---
+- name: Load OS Specific vars
+  include_vars: "{{ lookup('first_found', possible_files) }}"
+  vars:
+    possible_files:
+      - "../vars/{{ ansible_distribution }}.yml"
+      - "../vars/{{ ansible_os_family }}.yml"
+      - ../vars/default.yml
+
+- name: Ensure git is there
+  become: yes
+  package:
+    name: git
+    state: present
+
+- name: Ensure $HOME/.local/src exists
+  file:
+    path: "{{ src_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Check if fasd is there
+  stat:
+    path: "/usr/local/bin/fasd"
+  register: fasdstat
+
+- name: Clone fasd repository
+  git:
+    repo: 'https://github.com/clvv/fasd'
+    dest: "{{ src_dir }}/fasd"
+  register: gitclone
+
+- name: Build fasd
+  when: gitclone.changed or fasdstat.stat.exists == False
+  make:
+    chdir: "{{ src_dir }}/fasd"
+
+- name: Install fasd
+  become: yes
+  when: gitclone.changed or fasdstat.stat.exists == False
+  make:
+    chdir: "{{ src_dir }}/fasd"
+    target: install

@@ -9,13 +9,6 @@
     path: "{{ xdg_data_home }}/nvim/site/autoload"
     state: directory
 
-- name: Add neovim ppa if Ubuntu
-  become: yes
-  when: ansible_distribution == "Ubuntu"
-  apt_repository:
-    repo: "ppa:neovim-ppa/stable"
-    state: present
-
 - name: Ensure neovim is installed
   become: "{{ 'no' if ansible_os_family == 'Darwin' else 'yes' }}"
   package:

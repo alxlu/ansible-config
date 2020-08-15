@@ -1,12 +1,14 @@
 packages:
   - jq
+  - git
+  - gcc
+  - make
   - fasd
   - openssh-server
   - mosh
   - nano
   - ncdu
   - fzf
-  - ripgrep
   - ansible
   - ansible-lint
   - yamllint
@@ -22,10 +24,8 @@ packages:
   - unzip
   - tar
   - fd-find
-  - lazygit
-
-ppas:
-  - "ppa:lazygit-team/release"
+# We can't add ripgrep here because there is a weird dep conflict with bat.
+# https://github.com/BurntSushi/ripgrep/issues/1562
 
 archives:
   - src: "https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip"

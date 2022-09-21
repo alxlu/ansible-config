@@ -10,11 +10,6 @@
     repo: 'https://github.com/alxlu/tmux-config'
     dest: "{{ xdg_config_home }}/tmux"
 
-- name: Ensure $XDG_CONFIG_HOME/tmux/plugins
-  file:
-    path: "{{ xdg_config_home }}/tmux/plugins"
-    state: directory
-
 - name: Set push url to SSH
   git_config:
     name: "url.git@github.com:.pushInsteadOf"
@@ -22,7 +17,14 @@
     value: "https://github.com/"
     repo: "{{ xdg_config_home }}/tmux"
 
-- name: Clone tpm
-  git:
-    repo: 'https://github.com/tmux-plugins/tpm'
-    dest: "{{ xdg_config_home }}/tmux/plugins/tpm"
+- name: Get dwm.tmux
+  unarchive:
+    remote_src: yes
+    src: "https://github.com/alxlu/dwm.tmux/releases/download/0.1.1/dwm.tmux.tar.gz"
+    dest: "{{ ansible_tmp }}"
+    mode: '755'
+
+- name: Install dwm.tmux
+  make:
+    chdir: "{{ ansible_tmp }}/dwm.tmux"
+    target: install

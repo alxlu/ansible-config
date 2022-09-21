@@ -1,0 +1,28 @@
+---
+- name: default vars
+  include_vars: ../vars/default.yml
+
+- name: Install | Debian and related families
+  ansible.builtin.include_tasks: install_debian.yml
+
+- name: Install | Enable Service
+  become: true
+  ansible.builtin.service:
+    name: "{{ tailscale_service }}"
+    state: started
+    enabled: true
+
+- name: Install | Bring Tailscale Up
+  become: true
+  ansible.builtin.command: "tailscale up {{ tailscale_args | default() | trim }} --authkey={{ tailscale_authkey | trim }}"
+  # Since the auth key is included in this task's output, we do not want to log output
+  no_log: "{{ not (insecurely_log_authkey | bool) }}"
+  register: tailscale_start
+  # If a failure occurred due to state changes, we still want to log a redacted version of the error if "no_log" is true
+  ignore_errors: true
+  when: not tailscale_up_skip
+    # and ('Logged out.' in tailscale_status.stdout
+    # or state_checksum != existing_state_checksum)
+  # notify: Confirm Tailscale is Connected
+  # async: 60
+  # poll: 5

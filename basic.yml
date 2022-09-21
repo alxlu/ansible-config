@@ -1,0 +1,32 @@
+---
+- hosts: basic
+  remote_user: pi
+  vars:
+    - insecurely_log_authkey: false
+    - tailscale_args: ""
+    - tailscale_authkey: "{{ lookup('env', 'TAILSCALE_KEY') }}"
+    - src_dir: "{{ ansible_env.HOME }}/.local/src"
+    - bin_dir: "{{ ansible_env.HOME }}/.local/bin"
+    - xdg_config_home: "{{ ansible_env.HOME }}/.config"
+    - xdg_data_home: "{{ ansible_env.HOME }}/.local/share"
+  tasks:
+    - import_tasks: roles/common/tasks/dirs.yml
+
+    - name: Ensure git
+      become: true
+      ansible.builtin.apt:
+        name: git
+        state: latest
+        update_cache: true
+
+    - name: Ensure fzf
+      become: true
+      ansible.builtin.apt:
+        name: fzf
+        state: latest
+        update_cache: true
+
+    - import_tasks: roles/dev/tasks/zsh.yml
+    - import_tasks: roles/dev/tasks/tmux.yml
+    - import_tasks: roles/tailscale/tasks/install.yml
+

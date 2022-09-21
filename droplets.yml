@@ -1,11 +1,11 @@
 ---
 - hosts: digitalocean
-  roles:
-    - kewlfft.aur
-    - geerlingguy.docker
   vars:
     src_dir: "{{ ansible_env.HOME }}/.local/src"
     xdg_config_home: "{{ ansible_env.HOME }}/.config"
     xdg_data_home: "{{ ansible_env.HOME }}/.local/share"
   tasks:
-    - import_tasks: roles/dev/tasks/main.yml
+    - import_tasks: roles/common/tasks/dirs.yml
+    - import_tasks: roles/dev/tasks/zsh.yml
+    - import_tasks: roles/dev/tasks/tmux.yml
+    - import_tasks: roles/dev/tasks/neovim.yml

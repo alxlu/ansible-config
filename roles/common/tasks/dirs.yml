@@ -4,3 +4,28 @@
     path: "{{ ansible_tmp }}"
     state: directory
     mode: '755'
+
+- name: Ensure ~/.local/src exists
+  file:
+    path: "{{ src_dir }}"
+    state: directory
+    mode: '755'
+
+- name: Ensure ~/.local/bin exists
+  file:
+    path: "{{ bin_dir }}"
+    state: directory
+    mode: '755'
+
+- name: Ensure ~/.local/share exists
+  file:
+    path: "{{ xdg_data_home }}"
+    state: directory
+    mode: '755'
+
+- name: Ensure ~/.config exists
+  file:
+    path: "{{ xdg_config_home }}"
+    state: directory
+    mode: '755'
+

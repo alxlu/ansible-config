@@ -1,0 +1,24 @@
+---
+- hosts: media
+  remote_user: alex
+  vars:
+    - src_dir: "{{ ansible_env.HOME }}/.local/src"
+    - bin_dir: "{{ ansible_env.HOME }}/.local/bin"
+    - xdg_config_home: "{{ ansible_env.HOME }}/.config"
+    - xdg_data_home: "{{ ansible_env.HOME }}/.local/share"
+  tasks:
+    - import_tasks: roles/common/tasks/dirs.yml
+    - import_tasks: roles/dev/tasks/zsh.yml
+    - name: Ensure make
+      become: true
+      ansible.builtin.apt:
+        name: make
+        state: latest
+        update_cache: true
+    - import_tasks: roles/dev/tasks/tmux.yml
+    - name: Ensure fzf
+      become: true
+      ansible.builtin.apt:
+        name: fzf
+        state: latest
+        update_cache: true

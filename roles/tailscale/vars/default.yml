@@ -1,0 +1,27 @@
+debian_distro:
+  pop!_os: ubuntu
+  ubuntu: ubuntu
+  debian: debian
+
+apt_deb: deb https://pkgs.tailscale.com/stable/{{ debian_distro[ansible_distribution | lower] }} {{ ansible_distribution_release | lower }} main
+
+apt_signkey: https://pkgs.tailscale.com/stable/{{ debian_distro[ansible_distribution | lower] }}/{{ ansible_distribution_release | lower }}.gpg
+
+tailscale_package: tailscale
+tailscale_service: tailscaled
+
+repo_description: Tailscale repository
+
+apt_dependencies:
+  - gnupg2
+  - gnupg-agent
+  - apt-transport-https
+  - python3-apt
+
+legacy_apt_dependencies:
+  # Only install on legacy Debian systems
+  - python-apt
+
+tailscale_up_args: '{{ tailscale_args | default() }} --authkey={{ tailscale_authkey }}'
+
+tailscale_up_skip: false

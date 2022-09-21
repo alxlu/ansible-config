@@ -1,0 +1,154 @@
+---
+- hosts: routers
+  remote_user: pi
+  vars:
+    - insecurely_log_authkey: false
+    - tailscale_args: "--exit-node=100.65.87.13 --exit-node-allow-lan-access --advertise-routes=192.168.17.0/24"
+    - tailscale_authkey: "{{ lookup('env', 'TAILSCALE_KEY') }}"
+    - src_dir: "{{ ansible_env.HOME }}/.local/src"
+    - bin_dir: "{{ ansible_env.HOME }}/.local/bin"
+    - xdg_config_home: "{{ ansible_env.HOME }}/.config"
+    - xdg_data_home: "{{ ansible_env.HOME }}/.local/share"
+  tasks:
+    # - name: Ensure git
+    # - import_tasks: roles/common/tasks/dirs.yml
+
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name: git
+    #     state: latest
+    #     update_cache: true
+
+    # - name: Ensure fzf
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name: fzf
+    #     state: latest
+    #     update_cache: true
+
+    # - import_tasks: roles/dev/tasks/zsh.yml
+    # - import_tasks: roles/dev/tasks/tmux.yml
+    # - import_tasks: roles/tailscale/tasks/install.yml
+
+    # - name: Ensure hostapd
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name: hostapd
+    #     state: latest
+    #     update_cache: true
+
+    # - name: Ensure isc-dhcp-server
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name: isc-dhcp-server
+    #     state: latest
+    #     update_cache: true
+
+    # - name: Ensure iptables
+    #   become: true
+    #   ansible.builtin.apt:
+    #     name: iptables
+    #     state: latest
+    #     update_cache: true
+
+    - name: Configure Sysctl
+      become: true
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        state: present
+        ignoreerrors: true
+        sysctl_set: true
+
+    - name: comment out option domain-name in dhcpd.conf
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/dhcp/dhcpd.conf
+        regexp: '^(option domain-name ".*)'
+        line: '# \1'
+        backrefs: yes
+
+    - name: comment out option domain-name-servers in dhcpd.conf
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/dhcp/dhcpd.conf
+        regexp: '^(option domain-name-servers .*)'
+        line: '# \1'
+        backrefs: yes
+
+    - name: uncomment out authoritative in dhcpd.conf
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/dhcp/dhcpd.conf
+        regexp: '#authoritative;'
+        line: 'authoritative;'
+
+    - name: add config to dhcpd.conf
+      become: true
+      ansible.builtin.blockinfile:
+        insertafter: EOF
+        path: /etc/dhcp/dhcpd.conf
+        block: |
+          subnet 192.168.17.0 netmask 255.255.255.0 {
+            range 192.168.17.10 192.168.17.50;
+            option broadcast-address 192.168.17.255;
+            option routers 192.168.17.1;
+            default-lease-time 600;
+            max-lease-time 7200;
+            option domain-name "local";
+            option domain-name-servers 8.8.8.8, 8.8.4.4;
+          }
+
+    - name: update v4 isc-dhcp-server interfaces
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/default/isc-dhcp-server
+        regexp: 'INTERFACESv4=""'
+        line: 'INTERFACESv4="wlan0"'
+
+    - name: update v6 isc-dhcp-server interfaces
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/default/isc-dhcp-server
+        regexp: 'INTERFACESv6=""'
+        line: 'INTERFACESv6="wlan0"'
+
+    - name: disable rfkil for  wlan0
+      become: true
+      ansible.builtin.shell: rfkill unblock wlan
+
+    # - name: take down wlan0
+    #   become: true
+    #   ansible.builtin.shell: ifdown wlan0
+
+    - name: configure hostapd
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/hostapd/hostapd.conf
+        content: |
+          interface=wlan0
+          ssid=nycpi
+          country_code=US
+          hw_mode=g
+          channel=6
+          macaddr_acl=0
+          auth_algs=1
+          ignore_broadcast_ssid=0
+          wpa=2
+          wpa_passphrase=PikaPika1
+          wpa_key_mgmt=WPA-PSK
+          wpa_pairwise=CCMP
+          wpa_group_rekey=86400
+          ieee80211n=1
+          wme_enabled=1
+
+    - name: set hostapd config location
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/default/hostapd
+        regexp: '^#DAEMON_CONF=""'
+        line: 'DAEMON_CONF="/etc/hostapd/hostapd.conf"'
+
+    - name: set iptables
+      become: true
+      ansible.builtin.shell: iptables -t nat -A POSTROUTING -o tailscale0 -j MASQUERADE
